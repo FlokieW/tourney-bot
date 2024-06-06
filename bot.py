@@ -13,6 +13,7 @@ AUTHORIZED_ROLE_IDS = list(map(int, os.getenv('AUTHORIZED_ROLE_IDS').split(','))
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.guilds = True
 intents.members = True
 bot = commands.Bot(command_prefix='?', intents=intents)
 
@@ -74,9 +75,9 @@ async def ranks(ctx):
 
                 # Check each user's roles
                 for index, row in df.iterrows():
-                    user = discord.utils.get(bot.get_all_members(), name=row['Discord Username'])
-                    if user:
-                        for role in user.roles:
+                    member = await ctx.guild.fetch_member_named(row['Discord Username'])
+                    if member:
+                        for role in member.roles:
                             if role.name in CONFIGURED_ROLES:
                                 df.at[index, 'Role'] = role.name
                                 break
