@@ -75,7 +75,7 @@ async def ranks(ctx):
 
                 # Check each user's roles
                 for index, row in df.iterrows():
-                    member = discord.utils.get(ctx.guild.members, name=row['Discord Username'])
+                    member = discord.utils.get(ctx.guild.members, name=row['Discord Username'].lower())
 
                     if member:
                         for role in member.roles:
