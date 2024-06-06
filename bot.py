@@ -3,6 +3,9 @@ from discord.ext import commands
 import pandas as pd
 import random
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 authorized_roles = os.getenv('AUTHORIZED_ROLES').split(',')
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
