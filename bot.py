@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-authorized_roles = os.getenv('AUTHORIZED_ROLES').split(',')
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 CONFIGURED_ROLES = os.getenv('CONFIGURED_ROLES').split(',')
+AUTHORIZED_ROLE_IDS = list(map(int, os.getenv('AUTHORIZED_ROLE_IDS').split(',')))
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -24,7 +24,7 @@ async def on_ready():
     print(f'We have logged in as {bot.user}')
 
 @bot.command(name='premiumsignup')
-@commands.has_any_role(*authorized_roles)
+@commands.has_any_role(*AUTHORIZED_ROLE_IDS)
 async def premium_signup(ctx, channel: discord.TextChannel):
     embed = discord.Embed(title="Server Subscriber Code Claim", description="Click the button to claim your code.", color=0x00ff00)
     button = discord.ui.Button(label="Claim Code", style=discord.ButtonStyle.primary)
@@ -46,7 +46,7 @@ async def premium_signup(ctx, channel: discord.TextChannel):
     await channel.send(embed=embed, view=view)
 
 @bot.command(name='uploadcsv')
-@commands.has_any_role(*authorized_roles)
+@commands.has_any_role(*AUTHORIZED_ROLE_IDS)
 async def upload_csv(ctx):
     if ctx.message.attachments:
         for attachment in ctx.message.attachments:
@@ -61,7 +61,7 @@ async def upload_csv(ctx):
                 await ctx.send("Codes have been imported successfully.")
 
 @bot.command(name='ranks')
-@commands.has_any_role(*authorized_roles)
+@commands.has_any_role(*AUTHORIZED_ROLE_IDS)
 async def ranks(ctx):
     if ctx.message.attachments:
         for attachment in ctx.message.attachments:
@@ -87,5 +87,10 @@ async def ranks(ctx):
 
                 # Send the new CSV file
                 await ctx.send(file=discord.File(new_filename))
+
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.MissingAnyRole):
+        await ctx.send('You do not have the required role to use this command.')
 
 bot.run(DISCORD_TOKEN)
