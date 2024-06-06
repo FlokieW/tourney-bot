@@ -13,6 +13,7 @@ CONFIGURED_ROLES = os.getenv('CONFIGURED_ROLES').split(',')
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.members = True
 bot = commands.Bot(command_prefix='?', intents=intents)
 
 codes = []  # List to store the codes from the CSV file
