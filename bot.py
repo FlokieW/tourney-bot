@@ -27,7 +27,7 @@ async def on_ready():
 @bot.command(name='premiumsignup')
 @commands.has_any_role(*AUTHORIZED_ROLE_IDS)
 async def premium_signup(ctx, channel: discord.TextChannel):
-    embed = discord.Embed(title="Server Subscriber Code Claim", description="Click the button to claim your code.", color=0x00ff00)
+    embed = discord.Embed(title="Server Sub Early Access Code", description="Click the button to claim your tournament join code.", color=0xf59725)
     button = discord.ui.Button(label="Claim Code", style=discord.ButtonStyle.primary)
 
     async def button_callback(interaction):
